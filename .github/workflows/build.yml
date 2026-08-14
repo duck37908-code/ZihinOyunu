@@ -19,14 +19,15 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential libsqlite3-dev sqlite3 bzip2 libbz2-dev zlib1g-dev libssl-dev openjdk-17-jdk zip unzip
+        sudo apt-get install -y build-essential libsqlite3-dev sqlite3 bzip2 libbz2-dev zlib1g-dev libssl-dev openjdk-17-jdk zip unzip ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev
         pip install --upgrade pip
         pip install buildozer kivy
 
-    - name: Build APK with Buildozer
+    - name: Build APK
       run: |
-        buildozer init
-        buildozer -v android debug
+        yes | buildozer init
+        sed -i 's/requirements = python3,kivy/requirements = python3,kivy/g' buildozer.spec
+        yes | buildozer -v android debug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
